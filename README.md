@@ -1,2 +1,671 @@
+<<<<<<< HEAD
 # cadec-2021-compose
 Cadec 2021 presentation on Jetpack Compose
+=======
+# Jetpack Compose
+
+## Agenda
+
+
+---
+1. Why Jetpack Compose
+2. What is Jetpack Compose
+3. Thinking in Jetpack Compose
+4. Recomposition
+5. Thinking in React 
+6. Applying React in Compose 
+7. Differences
+8. Conclusions
+
+
+## Why Jetpack Compose - SOLID
+---
+
+- Reduce maintenance efforts.
+- Minimize the complexity and cost of change.
+- Enhance usability and extensibility.
+- Improve application testability and code readability.
+
+## Why Jetpack Compose - MVVM 
+---
+> Current Android dev is with the MVVM architecture, which was also very prevalant in pre-react FE architectures including IOS.
+- Model
+    - Data of the application, can't talk directly to a view
+- View
+    - UI of the application, observes data from the View Model
+- Model View
+    - Link between the View and the model, also offers two way data bindings ..
+> This is a great archichecture why change? From a React perspective it very much comes down to Reasonability: being able to understand and reason over your code!, xml, class models, data streams, it's just far to complex to grok! and then also cohesion over coupling. But first what do want from software.
+
+## Why Jetpack Compose 
+---
+> We want to create CLEAN, Testable usable/extensible and understandable code.
+- Reduce maintenance efforts.
+- Minimize the complexity and cost of change.
+- Enhance usability and extensibility.
+- Improve application testability and code readability.
+
+## Why Jetpack Compose - Coupling and Cohesion 1/3
+---
+1. *Coupling* -  is the dependency amoung units in different modules and reflects the ways in which part of one module influence parts of other modules
+2. *Cohesion* - is instead the relationship between the units within a module and indicates how wel grouped the units in the module are 
+3. Maintainable Software - we should aim for low *coupling* and high *cohesion*
+
+## Why Jetpack Compose - Coupling and Cohesion 2/3
+---
+1. Coupling creates brittle highly implicit couplings.
+2. XML View - Kotlin ViewModel , if you remove one or the other this can result in NullReferences
+3. Hard to test as a unit
+
+
+## Why Jetpack Compose - Coupling and Cohesion 3/3
+---
+1. We increase Cohesion and move closer to Clean code.
+
+2. Mix Logic with UI? 
+    1. it's already mixed but with coupling... 
+    2. React came to exactly the same conclusion
+3. Everything is in one place, makes it easier to reason over.
+4. Easier to test
+
+## What is Jetpack Compose 
+---
+- A modern Toolkit for building native Android UI
+- Declarative programming model
+    - You declare the layout/ look and feel
+    - As State Changes your UI automatically updates
+    - Built on Kotlin
+- Tightly integrated into Android Studio
+- Composition over inheritence 
+- Encapsulation 
+- Recomposition 
+
+> Jetpack Compose is a modern toolkit for building native Android UI. It's based on the declarative programming model, so you can simply describe what your UI should look like, and Compose takes care of the rest—as app state changes, your UI automatically updates. Because it’s built on Kotlin, it's fully interoperable with the Java programming language and has direct access to all of the Android and Jetpack APIs. It’s compatible with the existing UI toolkit, so you can mix and match classic and new views, and it’s designed with Material and animations from the start.
+
+## When 
+---
+- Jetpack launched at Googles 2018 I/0 Developer conference
+- Jetpack Compose launched at Googles 2019 I/0 Developer conference
+- Alphas appeared in 2020 now on 1.0.0-alpha09
+
+## Driving force 
+---
+### Leland Richardson
+- Lead React Native Architect at Air BnB
+- Creator of Enzyme
+- Hugely popular in the react community, conferences, speaker
+- Switched to Google at the same shortly afer Air BnB ditched React native
+- Gave a "what if" presentation on the possibility of using Kotlin or Swift with Reacts Paradigm
+- Main driving force behind Jetpack Compose and the main link back to the React community
+
+## Thinking in Jetpack Compose -  
+---
+
+- ### Declarative
+>1. Declarative API that allows you to render your app UI without *Imperatively* mutating UI views
+    1. Imperative way of updating UI is to directly mutate the UI widgets internal state, using methods like addChild or setText, much like in JQuery
+    2. Becomes messy and hard to track changes over time.
+>2. Simplifies building and updating user interfaces
+>3. Recomposes the entire screen from scratch, applying state changes to the UI
+    1. Can be expensive although the algorithm for Recomposition is fast.
+
+- ### Composable Functions 
+>1. Fed data and emits UI elements
+>2. annotated with @Composable
+>3. Wraps your data in other composable like Text.
+>4. Doesn’t return anything, emits UI hierarchy by calling other composable functions.
+>5. Idempotent, Pure, free of side effects, behaves the same way when called a number of times.
+
+- ### Data Down, Events Up
+  - Data
+>1. Imperative object orientated UI toolkits, have a tree of internal stateful widgets with getters and setters, which your app logic interacts with.
+> 2. With compose, Composables are relatively stateless and are not exposed as objects, but *functions*.
+> 3. You call these with different arguments and they respond with those arguments transformed into UI.
+> 4. You update the UI by calling the same composable function with different arguments.
+> 5. Data trickles down from the top level composable.
+-
+  - Events
+> 1. When the user interacts with the UI through an event ( onClick ).  
+> 2. The app logic will mutate the state 
+> 3. This new state is then trickled down by calling the composable with fresh arguments. 
+> 4. This is known as recomposition.
+
+- ### Dynamic Content / Logic
+> 1. Composables are written in Kotlin not XML.
+> 2. This means you have the full flexibility of the kotlin language, so you can use all of it's constructs in your composable.  This is very similar to React in that it brings you back to the code (JS) instead of having to learn a framework DSL to be able to apply logic your view ...
+
+- ### Recomposition
+> 1. In an Imperative UI to change a widget you call a setter on a widget to change its internal state.  
+> 2. In compose you call a composable function with new data.
+> 3. Doing so causes the function to be *RECOMPOSED*, it is *REDRAWN*, if necessary with new data.
+> 4. The Compose framework can intelligently recompose only the components that changed.
+
+> ### TODO: Example with counter
+
+## Composable Considerations 
+---
+1. Composable functions can execute in any order
+2. Composable functions can execute in parallel
+3. Recomposition skips as many composable functions and lambdas as possible
+4. Recomposition is optimistic and may be canceled
+5. A composable function might be run quite frequently, as often as every frame of an animation!
+
+
+## Composable Considerations - Notes
+---
+1. Composable functions can execute in any order
+```kotlin
+@Composable
+fun ButtonRow() {
+    MyFancyNavigation {
+        StartScreen()
+        MiddleScreen()
+        EndScreen()
+    }
+}
+```
+
+> - Composable aren’t run in order.
+> - Compose has the option of recognising that some UI elements are higher priority than others, drawing them first.
+> - One composable can’t be dependent on a data change of another.  They must be self contained and in this situation the data must be central ( even global ) for those composable.
+
+2. Composable functions can execute in parallel
+```kotlin
+@Composable
+@Deprecated("Example with bug")
+fun ListWithBug(myList: List<String>) {
+    var items = 0
+
+    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+        Column {
+            for (item in myList) {
+                Text("Item: $item")
+                items++ // Avoid! Side-effect of the column recomposing.
+            }
+        }
+        Text("Count: $items”)
+    }
+}
+```
+> 1. Compose can optimise recomposition by running composable functions in parallel.  They may execute within a pool of background threads.
+> 2. To ensure consistent behaviour all composable should have no side effects.  Instead side effects that triggered through callbacks should be run on the UI thread.
+> 3. Code that modifies a local variable is not code safe.
+As the composable could be called multiple times.
+ 
+
+3. Recomposition skips as many composable functions and lambdas as possible
+> - Recomposition will only re-compose those elements that have new data/arguments
+> - ### TODO: EXAMPLE OF TEXT SPINNER IN SEARCH BAR
+
+4. Recomposition is optimistic and may be canceled
+> - Recomposition starts whenever Compose thinks that a parameter has changed.
+> - It’s optimistic in that it expects to finish recomposition before the parameters change again.
+> - If a param does change before recomposition finishes, it will discard the last changes and then restart with the new parameter.
+> - To avoid this ensure that all Composable are idempotent and side effect free
+
+5. A composable function might be run quite frequently, as often as every frame of an animation!
+> - A Composable could run every frame of a UI animation. 
+> - Jank can be experienced if the composable performs an expensive operation.
+> - *MOVE EXPENSIVE WORK TO ANOTHER THREAD*, outside of composition and pass the data to Compose using mutableStateOf. 
+
+## Thinking In React
+---
+1. Start with a mock, UI and Data
+2. Break UI in a component Hierarchy
+3. Build a static version in React
+4. Identify The minimal Representation Of UI State
+5. Identify where the state should live ( Data down )
+6. An Inverse Data Flow, top level component passes callbacks to child components to mutate the state.
+> How do we apply TIR to compose, can we follow the same approach as we would for a normal react appliction?
+> We'll see using the FlickrBrowser app, to walk us through the TIR points and looking at we can apply these.
+
+## Applying React in Compose
+---
+1. Start with a mock, UI and Data
+    1. Flickr Browser app
+2. Break UI in a component Hierarchy
+    1. Container
+    2. SearchBar
+        1. Loading spinner
+    3. Photo List
+        1. Photo List Item
+    4. Photo details
+
+3. Build a static version in Compose!
+4. Identify The minimal Representation Of UI State
+    1. Flickr photo list
+    2. Flickr photo item
+    3. Search bar
+        1. loading
+        2. Search Text
+5. Identify where the state should live ( Data down )
+    1. Move all the state to the root Activity or Container
+6. An Inverse Data Flow, top level component passes callbacks to child components to mutate the state.
+    1. onHandleSearchTextChange - mutates the search text
+
+## Applying React in Compose - App State 
+---
+1. useMutableStateOf
+2. Can be inlined or extrapolated to a view model
+3. List of flickr photos based on api 
+```json
+{
+  "photos": {
+    "page": 1,
+    "pages": 8864,
+    "perpage": 1,
+    "total": "8864",
+    "photo": [
+      {
+        "id": "50718869598",
+        "owner": "157354161@N02",
+        "secret": "b2f2c029d8",
+        "server": "65535",
+        "farm": 66,
+        "title": "A7403526-Edit",
+        "ispublic": 1,
+        "isfriend": 0,
+        "isfamily": 0,
+        "url_s": "https:\/\/live.staticflickr.com\/65535\/50718869598_b2f2c029d8_m.jpg",
+        "height_s": 240,
+        "width_s": 240,
+        "url_o": "https:\/\/live.staticflickr.com\/65535\/50718869598_af9ed208b1_o.jpg",
+        "height_o": 3250,
+        "width_o": 3250,
+        "url_t": "https:\/\/live.staticflickr.com\/65535\/50718869598_b2f2c029d8_t.jpg",
+        "height_t": 100,
+        "width_t": 100,
+        "url_m": "https:\/\/live.staticflickr.com\/65535\/50718869598_b2f2c029d8.jpg",
+        "height_m": 500,
+        "width_m": 500,
+        "url_l": "https:\/\/live.staticflickr.com\/65535\/50718869598_b2f2c029d8_b.jpg",
+        "height_l": 1024,
+        "width_l": 1024
+      }
+    ]
+  },
+  "stat": "ok"
+}
+```
+2. Need to add state for the Search Bar
+```json
+{
+  "loading": true,
+  "searchText": "",
+}
+```
+
+## Applying React in Compose - Search Bar 
+---
+### Inverse Data Flow ( Events up ) - text box
+1. State
+    1. Loading
+    2. Text
+    3. Search Text
+2. Preview for the UI
+    1. debounced search text
+    2. loading spinner when loading
+3. Run in simulator 
+4. Write a test for the Search Bar
+
+## Applying React in Compose - Theming 
+---
+1. Show example of themeing
+2. ### TODO : Darkmode version of the App
+
+## Differences 
+---
+1. Obvious ones
+    1. Kotlin
+    2. Composable instead of Component
+2. Multithreaded!!
+3. Returns Unit, React returns a composition of components, Compose emits the composition.
+
+## Conclusions 
+---
+1. Love it!
+2. React wrapped in Kotlin clothing
+3. Theming
+4. Slow Build in comparison to React Native
+5. Android Studion - theyve really taken head of developers
+    1. Preview
+    2. Test
+    3. Tooling integration
+
+## React - Compose comparision 
+---
+
+React     |  Compose
+----------|-----------
+Reconciler                               |Composer
+children ( component props )             |children: @Composable () -> Unit
+hooks                                    |@Composable functions, camel case name
+useState                                 |remember {mutableStateOf(0)}
+useMemo                                  |remember
+useEffect                                |onCommit   
+Effect return  : () => { /* clean up */ }|onDispose
+On prop change : [prop1, prop2]          |onCommit(prop1, prop2)
+On mount useEffect(()=>{}, [])           |onActive
+useContext                               |Ambient
+Provider                                 |Provider
+StyledComponents - Flex                  |Themeing/ Modifier
+Key                                      |Key composable
+.map                                     |For each
+Types - Unions                           |Types - Unions
+Render                                   |Composition
+Storybook                                |Preview
+
+## React - Compose code comparisons 
+---
+
+<table >
+<tr>
+<th>React</th>
+<th>Compose</th>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">Components</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const MyButton = ({ text, icon }) => (
+  <Row>
+    {text}
+    {icon}
+  </Row>
+);
+``` 
+</td>
+<td>
+
+```kotlin
+@Composable
+fun MyButton(text: @Composable () -> Unit, 
+icon: @Composable () -> Unit) {
+    Row {
+
+        text()
+        icon()
+    }
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">State - useState</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const useTodoItems = () => {
+  const [items, setItems] = useState([]);
+  return [items, setItems];
+};
+``` 
+</td>
+<td>
+
+```kotlin
+@Composable
+fun todoItems() : List<TodoItem>{
+    var todoItems by remember { mutableStateOf(listOf<TodoItem>()) }
+    return todoItems
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">State - useState</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const useTodoItems = () => {
+  const [items, setItems] = useState([]);
+  return [items, setItems];
+};
+``` 
+</td>
+<td>
+
+```kotlin
+@Composable
+fun todoItems() : List<TodoItem>{
+    var todoItems by remember { mutableStateOf(listOf<TodoItem>()) }
+    return todoItems
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">Props / Children</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const Container = ({ children }) => 
+  <View>{children}</View>;
+
+
+
+const MyButton = ({ text, icon }) => (
+  <Row>
+    {text}
+    {icon}
+  </Row>
+);
+
+``` 
+</td>
+<td>
+
+```kotlin
+@Composable
+fun Container(children: @Composable () -> Unit) {
+    children()
+}
+
+@Composable
+fun MyButton(text: @Composable () -> Unit, 
+icon: @Composable () -> Unit) {
+    Row {
+        text()
+        icon()
+    }
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">useEffect - dependencies, properties</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+useEffect(() => {
+  someEffect(a, b);
+}, [a, b]);
+
+``` 
+</td>
+<td>
+
+```kotlin
+val (searchText, onSearchTextChange) = remember { mutableStateOf("") }
+val (todoList, onTodoListChange) = remember { mutableStateOf(List<TodoItem>) }
+onCommit(searchText) {
+    viewModelScope.launch {
+        val list = api.search(searchText)
+        onTodoListChange(list)
+    }
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">useEffect - run on every render</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+useEffect(() => {
+  runEveryCompose();
+});
+
+
+``` 
+</td>
+<td>
+
+```kotlin
+onCommit({ 
+runEveryCompose() 
+})
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">useEffect - cleanUp</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+useEffect(() => {
+  someEffect(a, b);
+  return () => cleanUp(a, b);
+}, [a, b]);
+``` 
+</td>
+<td>
+
+```kotlin
+onCommit(a, b) {
+    someEffect(a, b)
+    onDispose { cleanUp(a, b) }
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">useEffect - once</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+useEffect(() => {
+  doOnce();
+}, []);
+``` 
+</td>
+<td>
+
+```kotlin
+onActive {
+    doOnce()
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">StoryBook / Preview</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+
+``` 
+</td>
+<td>
+
+```kotlin
+@Preview
+@Composable
+fun TodoPreview() {
+    Todo(
+        id = "1", task = "I'm in Preview"
+    )
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">Context / Provider</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+<TodosContext.Provider value={todoState}>
+    <TodoActivityScreen>
+        {children}
+    </TodoActivityScreen>
+</TodosContext.Provider>
+
+const { addTodo, todos } = useTextContext();
+``` 
+</td>
+<td>
+
+```kotlin
+Providers(AmbientTodos provides TodoState()) {
+    TodoActivityScreen()
+}
+
+
+
+val todoViewModel = AmbientTodos.current;
+TodoScreen(
+    items = todoViewModel.todoItems
+    onAddItem = todoViewModel::addItem
+)
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">useContext</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const TodosContext = React.createContext<ITodosState>
+(initialState);
+
+export const useTodosContext = () => useContext(TodosContext);
+``` 
+</td>
+<td>
+
+```kotlin
+val AmbientTodos = ambientOf<TodoState>()
+val todoViewModel = AmbientTodos.current;
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">useMemo</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const memoizedVal = useMemo(() => expensiveCompute(a, b), [a,b]);
+``` 
+</td>
+<td>
+
+```kotlin
+val memoizedVal = remember(a, b{ 
+expensiveCompute(a, b)
+}
+```
+</td>
+</tr>
+<tr style="vertical-align:top" ><td colspan="2">Key</td></tr>
+<tr style="vertical-align:top" >
+<td>
+
+```js 
+const Todo = ({ id, task }) => 
+<Text key={id}>{task}</Text>;
+``` 
+</td>
+<td>
+
+```kotlin
+@Composable
+fun Todo(id: String, task: String) {
+    key(id) { Text(task) }
+}
+```
+</td>
+</tr>
+</table>
+
+>>>>>>> Fixed first commit

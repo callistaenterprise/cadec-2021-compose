@@ -1,0 +1,135 @@
+package com.sw.mobile.flickrbrowser.composables
+
+import androidx.compose.animation.animate
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.semantics.SemanticsProperties.TestTag
+import androidx.compose.ui.semantics.accessibilityLabel
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun CountersContainer(modifier: Modifier = Modifier) {
+  val (count, setCount) = remember { mutableStateOf(0) }
+  Row() {
+    Counter(id="1", count = count, setCount = setCount)
+    Counter(id="2", count = count, setCount = setCount)
+    Counter(id="3",count = count, setCount = setCount)
+  }
+}
+
+@Composable
+fun CounterContainer(modifier: Modifier = Modifier) {
+  val (count, setCount) = remember { mutableStateOf(0) }
+  Counter("1", count, setCount)
+}
+
+@Composable
+fun Counters(modifier: Modifier = Modifier) {
+  val (count1, setCount1) = remember { mutableStateOf(0) }
+  val (count2, setCount2) = remember { mutableStateOf(0) }
+  val (count3, setCount3) = remember { mutableStateOf(0) }
+  Row() {
+    Counter(id= "1",count = count1, setCount = setCount1)
+    Counter(id="2", count = count2, setCount = setCount2)
+    Counter(id="3", count = count3, setCount = setCount3)
+  }
+}
+
+@Composable
+fun Counter(id: String, count: Int, setCount: (count: Int) -> Unit, modifier: Modifier = Modifier) {
+  Row(
+    modifier =
+    modifier.padding(4.dp).background(color = MaterialTheme.colors.surface).padding(8.dp)
+
+  ) {
+    OutlinedButton(
+      onClick = { setCount(count + 1) },
+      border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+      shape = RoundedCornerShape(50), //50% percent,
+      modifier = modifier.semantics { testTag = "Counter-$id" }
+    ) {
+      Text(text = "Count : $count")
+    }
+  }
+}
+
+class CounterState() {
+  var count by mutableStateOf(0)
+
+  fun incCount() {
+    this.count++
+  }
+
+  fun setCountVal(value: Int) {
+    this.count = value
+  }
+}
+
+val AmbientCounter = ambientOf<CounterState>()
+
+@Composable
+fun CountersAmbient(modifier: Modifier = Modifier) {
+  Providers(AmbientCounter provides CounterState()) {
+    val counterState = AmbientCounter.current;
+    Column {
+      Row() {
+        Counter(id="1", count = counterState.count, setCount = counterState::setCountVal)
+        Counter(id="2", count = counterState.count, setCount = counterState::setCountVal)
+        Counter(id="3", count = counterState.count, setCount = counterState::setCountVal)
+      }
+      ScaledDot()
+    }
+  }
+}
+
+@Composable
+fun ScaledDotRow(modifier: Modifier = Modifier) {
+  val counterState = AmbientCounter.current;
+  Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween) {
+    ScaledDot()
+    ScaledDot()
+  }
+}
+
+@Composable
+fun ScaledDot(modifier: Modifier = Modifier) {
+  val counterState = AmbientCounter.current;
+  val (scale, setScale) = remember { mutableStateOf(0.0f) }
+  onCommit(counterState.count, {
+    setScale((counterState.count * 0.3).toFloat())
+  })
+  val animatedScale = animate(scale, TweenSpec(500))
+  Box(
+    modifier = Modifier.scale(animatedScale).preferredSize(100.dp)
+      .clip(CircleShape)
+      .background(MaterialTheme.colors.secondary)
+  )
+}
+
+@Preview
+@Composable
+fun CounterPreview() {
+  CounterContainer()
+}
+
+@Preview
+@Composable
+fun CountersPreview() {
+  Counters()
+}
+
