@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.sw.mobile.flickrbrowser.components.SearchInputText
+import com.sw.mobile.flickrbrowser.components.SearchInputTextContainer
 import com.sw.mobile.flickrbrowser.model.FlickrItem
 import com.sw.mobile.flickrbrowser.ui.FlickrbrowserTheme
 
@@ -73,7 +74,7 @@ fun BodyContent(navController: NavHostController, modifier: Modifier = Modifier)
     Column(
         modifier = modifier
     ) {
-        SearchInputText()
+        SearchInputTextContainer()
         FlickrPhotoList(navController = navController)
     }
 }

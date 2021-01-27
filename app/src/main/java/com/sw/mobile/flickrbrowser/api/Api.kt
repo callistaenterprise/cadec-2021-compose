@@ -15,7 +15,7 @@ fun getLogger(): HttpLoggingInterceptor {
     return logging
 }
 
-private val service: MainNetwork by lazy {
+private val service: IApi by lazy {
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(getLogger())
         .build()
@@ -26,7 +26,7 @@ private val service: MainNetwork by lazy {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    retrofit.create(MainNetwork::class.java)
+    retrofit.create(IApi::class.java)
 }
 
 fun getApi() = service
@@ -34,7 +34,7 @@ fun getApi() = service
 /**
  * Main network interface which will fetch a new welcome title for us
  */
-interface MainNetwork {
+interface IApi {
     @Headers("Content-Type: application/json")
     @GET("/services/rest")
     suspend fun search(
@@ -43,7 +43,7 @@ interface MainNetwork {
         @Query("privacy_filter") privacyFilter: String = "1",
         @Query("content_type") contentType: String = "1",
         @Query("extras", encoded = true) extras: String = "url_s,+url_o,+url_t,+url_m,+url_l",
-        @Query("per_page") perPage: Int= 20,
+        @Query("per_page") perPage: Int= 100,
         @Query("page") page: Int= 0,
         @Query("format") format: String = "json",
         @Query("nojsoncallback") nojsoncallback: Int= 1,

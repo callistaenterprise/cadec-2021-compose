@@ -7,69 +7,32 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sw.mobile.flickrbrowser.api.getApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FlickrViewModel : ViewModel() {
-    private var _items = listOf(
-        FlickrItem(
-            id = "1",
-            title = "The Moon",
-            date = "2018-12-12 14:05:33",
-            imageUrl = ""
-        ),
-        FlickrItem(
-            id = "2",
-            title = "fred",
-            date = "2018-12-12 14:05:33",
-            imageUrl = ""
-        ),
-        FlickrItem(
-            id = "3",
-            title = "barney",
-            date = "2018-12-12 14:05:33",
-            imageUrl = ""
-        ),
-        FlickrItem(
-            id = "4",
-            title = "steve",
-            date = "2018-12-12 14:05:33",
-            imageUrl = ""
-        ),
-        FlickrItem(
-            id = "5",
-            title = "alfred",
-            date = "2018-12-12 14:05:33",
-            imageUrl = ""
-        )
-    )
-    var photos by mutableStateOf(PhotosResponse())
-    var searchText by mutableStateOf("")
-        private set
-    var loading by mutableStateOf(false)
-    var items by mutableStateOf(listOf<FlickrItem>())
+open class FlickrViewModel(
+  val _searchText: String = "",
+  val _loading: Boolean = false,
+  _photos: PhotosResponse = PhotosResponse()
+) : ViewModel() {
+  var photos by mutableStateOf(_photos)
+  var searchText by mutableStateOf(_searchText)
+    private set
+  var loading by mutableStateOf(_loading)
+  var searchJob: Job? = null
 
-    init {
-        viewModelScope.launch {
-            // This coroutine will be canceled when the ViewModel is cleared.
-            items = _items
-        }
+  open fun onSearchFlickr(value: String) {
+    if (value.length < 3) return
+    searchText = value
+    loading = true
+    searchJob?.cancel()
+    searchJob = viewModelScope.launch {
+      delay(500)
+      photos = getApi().search(tags = "spacex", text = value)
+      loading = false
     }
-
-
-    fun onSearchText(value: String) {
-        searchText = value
-        items = _items.filter { it.title.contains(value, ignoreCase = true) }
-    }
-
-    fun onSearchFlickr(value: String) {
-        loading = true
-        viewModelScope.launch {
-            photos = getApi().search(tags = "spacex", text = value)
-        }
-        loading = false
-    }
-
+  }
 }
-
 
 val AmbientFlickrSearch = ambientOf<FlickrViewModel>()

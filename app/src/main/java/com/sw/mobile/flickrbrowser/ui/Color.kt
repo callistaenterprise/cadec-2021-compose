@@ -4,27 +4,27 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
-val Red700 = Color(0xffdd0d3c)
-val Red800 = Color(0xffd00036)
-val Red900 = Color(0xffc20029)
+val Orange700 = Color(0xFFFFA000)
+val Orange800 = Color(0xFFFF8F00)
+val Orange900 = Color(0xFFFF6F00)
 
-val Red200 = Color(0xfff297a2)
-val Red300 = Color(0xffea6d7e)
+val Orange200 = Color(0xFFFFE082)
+val Orange300 = Color(0xFFFFE082)
 
 val LightColors = lightColors(
-    primary = Red700,
-    primaryVariant = Red900,
+    primary = Orange700,
+    primaryVariant = Orange900,
     onPrimary = Color.White,
-    secondary = Red700,
-    secondaryVariant = Red200,
+    secondary = Orange700,
+    secondaryVariant = Orange200,
     onSecondary = Color.White,
-    error = Red800
+    error = Orange800
 )
 val DarkColors = darkColors(
-    primary = Red300,
-    primaryVariant = Red700,
+    primary = Orange300,
+    primaryVariant = Orange700,
     onPrimary = Color.Black,
-    secondary = Red300,
+    secondary = Orange300,
     onSecondary = Color.White,
-    error = Red200
+    error = Orange200
 )

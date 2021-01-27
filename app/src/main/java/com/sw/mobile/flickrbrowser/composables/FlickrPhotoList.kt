@@ -12,9 +12,8 @@ import com.sw.mobile.flickrbrowser.model.Photo
 @Composable
 fun FlickrPhotoList(navController: NavHostController, photos: List<Photo>? = null) {
     val flickrViewModel = AmbientFlickrSearch.current
-    val flickrItems = photos?: flickrViewModel.photos?.photos?.photo
-    println("---- FLICKR photos" + flickrItems)
-    if (flickrItems != null) LazyColumnFor(
+    val flickrItems = photos?: flickrViewModel.photos.photos.photo
+    if (flickrItems.size > 0 ) LazyColumnFor(
         items = flickrItems,
         contentPadding = PaddingValues(top = 8.dp)
     ) { photo->

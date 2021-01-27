@@ -1,6 +1,8 @@
 package com.sw.mobile.flickrbrowser.composables
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -10,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontStyle
@@ -26,8 +29,8 @@ import androidx.navigation.compose.rememberNavController
 fun FlickrPhotoRow(navController: NavHostController, photo: Photo, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.clickable(
-            onClick = { navController.navigate("photoDetails/${photo.url_l}") }
-        ).padding(bottom = 4.dp).clip(RoundedCornerShape(4.dp))
+            onClick = { navController.navigate("photoDetails/${if (photo.url_l?.length > 0) photo.url_l else photo.url_m}") }
+        ).padding(bottom = 4.dp).clip(RoundedCornerShape(4.dp)).border(BorderStroke(1.dp, MaterialTheme.colors.secondary), RoundedCornerShape(4.dp))
             .background(color = MaterialTheme.colors.surface).padding(8.dp).fillMaxWidth()
 
     ) {
